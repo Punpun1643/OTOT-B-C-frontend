@@ -19,7 +19,7 @@ const DUMMY_PLACES = [
     },
     {
         id: 'p2',
-        title: 'National University of Singapore',
+        title: 'School of Computing',
         description: 'Singapore university located in Kent Ridge',
         imageUrl:'https://eonreality.com/wp-content/uploads/2022/03/NUS-.jpeg',
         address: '21 Lower Kent Ridge Rd, Singapore 119077',
