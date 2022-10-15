@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import UserList from '../components/UserList';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const Users = () => {
-    const USERS = [{
-        id: 'u1',
-        name: 'Git',
-        image: 'https://static.wikia.nocookie.net/kirby/images/4/4e/KatFL_Kirby_artwork.png/revision/latest?cb=20220130163926&path-prefix=en',
-        places: 2
-    }];
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const [loadedUsers, setLoadedUsers] = useState();
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const responseData = await sendRequest('http://localhost:8000/api/users');
+                setLoadedUsers(responseData.users);
+            } catch (err) {}   
+        }
+        fetchUsers();
+    }, [sendRequest]);
+
+    
     return (
-        <UserList items={USERS} />
+        <React.Fragment>
+            <ErrorModal error={error} onClear={clearError} />
+                { isLoading && (
+                    <div className="center">
+                        <LoadingSpinner />
+                    </div>
+                )}
+                {!isLoading && loadedUsers && <UserList items={loadedUsers} />}
+        </React.Fragment>
     );
 }
 
