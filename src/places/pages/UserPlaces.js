@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory} from 'react-router-dom';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -11,6 +11,13 @@ const UserPlaces = () => {
     const [ loadedPlaces, setLoadedPlaces ] = useState();
 
     const userId = useParams().userId;
+    const history = useHistory();
+
+    const placeDeletedHandler = deletedPlaceId => {
+        setLoadedPlaces(prevPlaces => {
+            prevPlaces.filter(place => place.id !== deletedPlaceId);
+        })
+    }
 
     useEffect(() => {
         const fetchPlaces = async () => {
@@ -22,15 +29,19 @@ const UserPlaces = () => {
         fetchPlaces();
     }, [sendRequest, userId]);
 
+    const returnHandler = () => {
+        history.push('/')
+    }
+
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={clearError} />
+            <ErrorModal error={error} onClear={returnHandler} />
             {isLoading && (
                 <div className="center">
                     <LoadingSpinner />
                 </div>
             )}
-            {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+            {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />}
         </React.Fragment>
     );
 }
