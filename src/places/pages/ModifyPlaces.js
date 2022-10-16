@@ -91,7 +91,8 @@ const ModifyPlace = () => {
           address: formState.inputs.address.value,
           creator: formState.inputs.creator.value
         }), {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + auth.token
         });
         history.push('/' + auth.userId + '/places');
       } catch (err) {}

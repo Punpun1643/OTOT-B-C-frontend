@@ -52,7 +52,8 @@ const NewPlace = () => {
 
       await sendRequest('http://localhost:8000/api/places',
         'POST',
-        formData
+        formData, 
+        { Authorization: 'Bearer ' + auth.token }
       );
       // redirect user to a different page after succeed
       history.push('/');
