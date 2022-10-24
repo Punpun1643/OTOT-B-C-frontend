@@ -48,7 +48,7 @@ const ModifyPlace = () => {
     useEffect(() => {
       const fetchPlaces = async () => {
         try {
-          const responseData = await sendRequest(`http://localhost:8000/api/places/${placeId}`);
+          const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`);
           setLoadedPlace(responseData.place);
           setFormData(
             {
@@ -84,7 +84,7 @@ const ModifyPlace = () => {
       event.preventDefault();
 
       try {
-        await sendRequest(`http://localhost:8000/api/places/${placeId}`, 'PUT', JSON.stringify({
+        await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`, 'PUT', JSON.stringify({
           title: formState.inputs.title.value,
           description: formState.inputs.description.value,
           location: formState.inputs.location.value,
