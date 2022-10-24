@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useHistory} from 'react-router-dom';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import PlaceList from '../components/PlaceList';
+import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const UserPlaces = () => {
+    const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [ loadedPlaces, setLoadedPlaces ] = useState();
 
@@ -21,8 +23,11 @@ const UserPlaces = () => {
 
     useEffect(() => {
         const fetchPlaces = async () => {
+            
             try {
-                const responseData = await sendRequest(`http://localhost:8000/api/places/user/${userId}`);
+                const responseData = await sendRequest(`http://localhost:8000/api/places/user/${userId}`, 'GET', null, {
+                    Authorization: 'Bearer ' + auth.token
+                });
                 setLoadedPlaces(responseData.places);
             } catch (err) {}
         }
